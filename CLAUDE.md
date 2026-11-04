@@ -23,6 +23,10 @@ Dono: Ygor Betine (GitHub `ygorbetine`), diretor da Becine Studio. Repositório 
 - O Release `v0.2.0` existe **sem o zip** (só código-fonte). Não apague; publique a correção como **v0.2.1**.
 - No repositório faltava `.github/` e `.gitignore` no upload inicial; `.gitignore` e o workflow (quebrado) foram criados pelo navegador.
 
+## Notas para a próxima versão
+- Thumbnail não aparece na fila: nunca foi implementada (`js/ui.js` desenha `<div class="mini"></div>` vazio). Pedir a URL da thumbnail ao yt-dlp, guardar no item/histórico e mostrar na caixa.
+- O título na fila mostra o ID do vídeo (ex.: `[0jmo…`), aparentemente vindo do nome do arquivo e não do título original.
+
 ## Próximos passos (nesta ordem)
 1. Clonar o repositório, aplicar os arquivos deste pacote (`.github/workflows/release.yml`, `CLAUDE.md`), conferir `.gitignore`, commit e push.
 2. Criar a tag `v0.2.1` e confirmar que o Actions gera `cine-downloader-v0.2.1.zip` no Release. Depois testar a atualização automática a partir da v0.2.0 instalada.
