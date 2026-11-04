@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Cine Downloader</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="panel">
+<div class="topbar"></div>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+<div class="content">
+
+<header>
+  <div class="brand"><i class="dot"></i><b>CINE</b><span>Downloader</span></div>
+</header>
+
+<div id="update" class="update" hidden><span id="update-txt"></span><button class="btn" id="btn-update">Atualizar</button></div>
+
+<section class="card">
+  <label class="label" for="url">Link do vídeo</label>
+  <div class="row">
+    <input id="url" type="text" placeholder="Cole o link aqui" autocomplete="off">
+    <button class="btn icon" id="btn-paste" aria-label="Colar da área de transferência">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/></svg>
+    </button>
+  </div>
+  <div class="detected" id="detected"></div>
+</section>
+
+<section class="card">
+  <span class="label">Qualidade</span>
+  <div class="seg" data-group="quality">
+    <button class="on" data-v="best">Melhor</button><button data-v="2160">4K</button><button data-v="1080">1080p</button><button data-v="720">720p</button><button data-v="audio">Só áudio</button>
+  </div>
+  <div class="row between"><span class="label">Formato</span>
+    <div class="seg small" data-group="format"><button class="on" data-v="mp4">MP4</button><button data-v="mov">MOV</button></div>
+  </div>
+  <div class="row between"><span class="label">Codec</span>
+    <select id="codec" style="width:160px" aria-label="Codec">
+      <option value="prores422">ProRes 422</option><option value="proreslt">ProRes LT</option><option value="dnxhr">DNxHR</option><option value="h264">H.264</option>
+    </select>
+  </div>
+</section>
+
+<section class="card">
+  <span class="label">Destino</span>
+  <div class="seg" data-group="mode">
+    <button data-v="explorer">Só Explorer</button><button data-v="bin">Só Bin</button><button class="on" data-v="both">Ambos</button>
+  </div>
+
+  <div id="box-folder" class="drop">
+    <label class="sub" for="folder">Pasta do Windows</label>
+    <input id="folder" type="text" placeholder="Cole o caminho ou arraste uma pasta para cá">
+    <div class="row">
+      <button class="btn f1" id="btn-folder">Escolher…</button>
+      <button class="btn f1" id="btn-projdir" title="Usa a pasta do projeto aberto + \Downloads">Pasta do projeto</button>
+      <button class="btn" id="btn-openfolder" aria-label="Abrir no Explorer">Abrir</button>
+    </div>
+    <div id="recents" class="recents"></div>
+  </div>
+
+  <div id="box-bin">
+    <span class="sub">Bin do projeto (Premiere)</span>
+    <div class="row" style="margin-top:6px">
+      <button class="pick f1" id="btn-binpick"><span id="bin-label">Nenhum bin escolhido</span><span aria-hidden="true">▾</span></button>
+    </div>
+    <div id="bin-panel" class="binpanel" hidden>
+      <div class="row">
+        <input id="bin-filter" type="text" class="f1" placeholder="Filtrar bins…" aria-label="Filtrar bins">
+        <button class="btn" id="bin-refresh">Atualizar</button>
+      </div>
+      <div id="bin-tree" class="tree" role="tree"></div>
+      <div class="row">
+        <input id="bin-new" type="text" class="f1" placeholder="Novo bin dentro do selecionado" aria-label="Nome do novo bin">
+        <button class="btn" id="bin-create">Criar</button>
+      </div>
+      <div id="bin-msg" class="st" style="font-size:11px;color:var(--muted)"></div>
+    </div>
+  </div>
+
+  <label class="check"><input type="checkbox" id="chk-timeline"> Jogar na timeline após importar</label>
+  <label class="check"><input type="checkbox" id="chk-proxy" checked> Gerar proxy automático (recomendado para 4K)</label>
+</section>
+
+<button class="go" id="btn-go">
+  <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>
+  <span>Baixar e importar</span>
+</button>
+
+<section class="card">
+  <div class="row between"><span class="label">Fila</span><button class="btn ghost" id="btn-clear">Limpar histórico</button></div>
+  <div id="queue" style="display:flex;flex-direction:column;gap:8px"></div>
+</section>
+
+<footer>
+  <span id="ver">yt-dlp · versão não verificada</span>
+  <span>Use apenas com conteúdo próprio, licenciado ou autorizado.</span>
+  <div class="row" style="gap:0">
+    <button class="btn ghost" id="btn-log" style="padding:0 8px 0 0">Abrir pasta do log</button>
+    <button class="btn ghost" id="btn-upd" style="padding:0 8px">Verificar atualizações</button>
+  </div>
+  <span id="upd-status" style="min-height:14px"></span>
+  <div class="sig"><b>Becine Tools</b><span>Cine Downloader <span id="sig-ver"></span></span></div>
+</footer>
+
+</div>
+</div>
+<script src="js/core/logger.js"></script>
+<script src="js/core/config.js"></script>
+<script src="js/core/downloader.js"></script>
+<script src="js/core/updater.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
