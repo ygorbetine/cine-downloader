@@ -1,0 +1,7 @@
+bin/*.exe
+bin/*.zip
+*.log
+*.zip
+node_modules/
+.DS_Store
+Thumbs.db
