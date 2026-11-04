@@ -15,7 +15,7 @@ jobs:
 
       - name: Gravar a versão da tag
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          export VERSION="${GITHUB_REF_NAME#v}"
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           python3 - <<'PY'
           import json, os, re
