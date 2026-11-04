@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gravar a versão da tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          python3 - <<'PY'
+          import json, os, re
+          v = os.environ['VERSION']
+          d = json.load(open('version.json', encoding='utf-8'))
+          d['version'] = v
+          json.dump(d, open('version.json', 'w', encoding='utf-8'), indent=2)
+          m = open('CSXS/manifest.xml', encoding='utf-8').read()
+          m = re.sub(r'ExtensionBundleVersion="[^"]*"', 'ExtensionBundleVersion="' + v + '"', m)
+          m = re.sub(r'(<Extension Id="com.becine.cinedownloader.panel" Version=")[^"]*', lambda x: x.group(1) + v, m)
+          open('CSXS/manifest.xml', 'w', encoding='utf-8').write(m)
+          PY
+
+      - name: Montar o pacote
+        run: |
+          mkdir -p dist/cine-downloader
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'scripts' --exclude 'dist' ./ dist/cine-downloader/
+          (cd dist && zip -r "cine-downloader-v${VERSION}.zip" cine-downloader)
+
+      - name: Publicar o Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/cine-downloader-v${{ env.VERSION }}.zip
+          generate_release_notes: true
